@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новогодние каникулы в стиле МОНСТРЫ — Семь Озёр</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎄</text></svg>">
+<style>
+  /* ---------- БАЗА ---------- */
+  :root{
+    --bg: #f6f4fb;
+    --ink: #1c1230;
+    --ink-soft: #4a3f63;
+    --violet: #6b3fd4;
+    --violet-deep: #4a1fa8;
+    --lime: #c6f24e;
+    --lime-deep: #a8d92e;
+    --teal: #2fd6c3;
+    --glass: rgba(255,255,255,0.55);
+    --glass-border: rgba(255,255,255,0.75);
+    --shadow: 0 18px 50px rgba(74,31,168,0.12);
+    --radius: 26px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+
+  .container{width:min(1180px, 92%);margin:0 auto;}
+
+  /* ---------- ФОНОВЫЕ ПЯТНА ---------- */
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter: blur(90px);
+    opacity:.35;
+    z-index:-1;
+    pointer-events:none;
+  }
+  .blob-1{width:520px;height:520px;background:var(--violet);top:-160px;left:-140px;}
+  .blob-2{width:460px;height:460px;background:var(--teal);top:40%;right:-160px;}
+  .blob-3{width:420px;height:420px;background:var(--lime);bottom:-140px;left:20%;opacity:.28;}
+
+  /* ---------- АНИМАЦИЯ ПОЯВЛЕНИЯ ---------- */
+  .reveal{
+    opacity:0;
+    transform: translateY(42px);
+    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+    will-change: opacity, transform;
+  }
+  .reveal.visible{opacity:1;transform:none;}
+  .reveal.delay-1{transition-delay:.1s;}
+  .reveal.delay-2{transition-delay:.2s;}
+  .reveal.delay-3{transition-delay:.3s;}
+
+  /* ---------- КНОПКИ ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:20px 44px;
+    border-radius:60px;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.2px;
+    border:none;
+    cursor:pointer;
+    background: linear-gradient(120deg, var(--lime) 0%, var(--lime-deep) 100%);
+    color: var(--ink);
+    box-shadow: 0 14px 34px rgba(168,217,46,.45);
+    transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    position:relative;
+    overflow:hidden;
+    font-family:inherit;
+  }
+  .btn::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(120deg, rgba(255,255,255,.55), transparent 45%);
+    transform: translateX(-120%);
+    transition: transform .55s ease;
+  }
+  .btn:hover{transform: translateY(-4px) scale(1.03); box-shadow:0 22px 44px rgba(168,217,46,.55);}
+  .btn:hover::after{transform: translateX(120%);}
+  .btn:active{transform: translateY(-1px) scale(.99);}
+
+  .micro{
+    font-size:12.5px;
+    color: var(--ink-soft);
+    opacity:.85;
+    margin-top:14px;
+    max-width:520px;
+  }
+
+  /* ---------- ХЕДЕР ---------- */
+  header{
+    position: sticky;
+    top:0;
+    z-index:50;
+    backdrop-filter: blur(14px);
+    background: rgba(246,244,251,.7);
+    border-bottom:1px solid rgba(107,63,212,.08);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 0;
+  }
+  .logo{
+    font-weight:900;font-size:20px;letter-spacing:.5px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo-dot{
+    width:14px;height:14px;border-radius:50%;
+    background: linear-gradient(135deg, var(--violet), var(--teal));
+    box-shadow:0 0 0 6px rgba(107,63,212,.12);
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 6px rgba(107,63,212,.12);}
+    50%{box-shadow:0 0 0 12px rgba(107,63,212,.05);}
+  }
+  .nav a.nav-link{
+    font-weight:600;color:var(--ink-soft);margin-left:26px;font-size:15px;
+    transition:color .2s;
+  }
+  .nav a.nav-link:hover{color:var(--violet-deep);}
+  .nav .btn{padding:12px 26px;font-size:15px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:90px 0 70px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap:50px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size: clamp(34px, 4.6vw, 58px);
+    line-height:1.08;
+    font-weight:900;
+    letter-spacing:-1px;
+  }
+  .hero h1 .accent{
+    background: linear-gradient(120deg, var(--violet) 0%, var(--teal) 60%, var(--lime-deep) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.sub{
+    margin-top:24px;
+    font-size:19px;
+    color:var(--ink-soft);
+    max-width:560px;
+  }
+  .hero-actions{margin-top:38px;}
+
+  /* Баннер (картинка) */
+  .hero-art{
+    position:relative;
+    height: 580px; /* Фиксированная высота для красивого параллакса */
+    border-radius: 36px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    background: #e8e4f5; /* Заглушка, пока грузится картинка */
+  }
+  .hero-img{
+    position: absolute;
+    top: -10%;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center;
+    will-change: transform;
+  }
+
+  /* ---------- СЕКЦИИ ---------- */
+  section{padding:80px 0;}
+  .section-title{
+    font-size: clamp(26px, 3.2vw, 40px);
+    font-weight:900;
+    letter-spacing:-.6px;
+    margin-bottom:14px;
+  }
+  .section-lead{color:var(--ink-soft);font-size:18px;max-width:640px;}
+
+  .glass-card{
+    background: var(--glass);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border:1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding:34px;
+    transition: transform .35s ease, box-shadow .35s ease, background .35s ease;
+  }
+  .glass-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 28px 60px rgba(74,31,168,.18);
+    background: rgba(255,255,255,.72);
+  }
+
+  .pain-card{
+    max-width:760px;
+    margin:0 auto;
+    text-align:center;
+    border-left:6px solid var(--lime-deep);
+  }
+  .pain-card .quote{
+    font-size:clamp(20px,2.4vw,28px);
+    font-weight:800;
+    line-height:1.35;
+    margin-bottom:18px;
+  }
+  .pain-card p{color:var(--ink-soft);font-size:17px;}
+
+  .solution{
+    display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+  }
+  .solution .glass-card{padding:44px;}
+  .solution h2{font-size:clamp(24px,2.8vw,34px);font-weight:900;margin-bottom:18px;letter-spacing:-.5px;}
+  .solution p{color:var(--ink-soft);font-size:17px;}
+  .badge-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;}
+  .badge{
+    padding:10px 18px;border-radius:40px;font-weight:700;font-size:14px;
+    background:rgba(107,63,212,.1);color:var(--violet-deep);
+    border:1px solid rgba(107,63,212,.18);
+    transition: transform .25s ease, background .25s ease;
+  }
+  .badge:hover{transform:translateY(-3px);background:rgba(107,63,212,.18);}
+
+  .schedule-wrap{overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(107,63,212,.1);background:#fff;}
+  table{width:100%;border-collapse:collapse;font-size:15.5px;}
+  thead{
+    background:linear-gradient(120deg, var(--violet-deep), var(--violet));
+    color:#fff;
+  }
+  th,td{padding:16px 18px;text-align:left;}
+  tbody tr{border-bottom:1px solid rgba(107,63,212,.08);transition:background .25s;}
+  tbody tr:hover{background:rgba(198,242,78,.14);}
+  tbody tr:last-child{border-bottom:none;}
+  td strong{color:var(--violet-deep);}
+  .sched-note{margin-top:16px;font-size:13.5px;color:var(--ink-soft);font-style:italic;}
+
+  .cards-3{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:44px;
+  }
+  .mc-card{position:relative;overflow:hidden;}
+  .mc-card .price{
+    display:inline-block;margin-bottom:14px;padding:6px 14px;border-radius:30px;
+    background:var(--lime);font-weight:900;font-size:14px;color:var(--ink);
+  }
+  .mc-card h3{font-size:20px;font-weight:900;margin-bottom:10px;}
+  .mc-card p{color:var(--ink-soft);font-size:15.5px;}
+  .mc-card .age{margin-top:14px;font-size:13px;font-weight:700;color:var(--violet-deep);opacity:.8;}
+
+  .trust-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px;
+  }
+  .trust-item{
+    display:flex;gap:14px;align-items:flex-start;
+    padding:22px;border-radius:20px;
+    background:rgba(255,255,255,.65);
+    border:1px solid rgba(255,255,255,.9);
+    box-shadow:0 10px 26px rgba(74,31,168,.08);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .trust-item:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(74,31,168,.14);}
+  .trust-ico{
+    flex:0 0 44px;height:44px;border-radius:14px;
+    background:linear-gradient(135deg,var(--violet),var(--teal));
+    display:grid;place-items:center;color:#fff;font-weight:900;font-size:18px;
+  }
+  .trust-item span{font-size:15px;font-weight:600;color:var(--ink-soft);}
+
+  .cta-section{
+    position:relative;
+    border-radius:40px;
+    padding:70px 50px;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(198,242,78,.35), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(47,214,195,.35), transparent 45%),
+      linear-gradient(140deg, var(--violet-deep), var(--violet) 60%, #8b5cf6);
+    color:#fff;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .cta-section h2{font-size:clamp(26px,3.4vw,42px);font-weight:900;letter-spacing:-.6px;line-height:1.15;}
+  .cta-section p{max-width:680px;margin-top:18px;font-size:17.5px;color:rgba(255,255,255,.9);}
+  .cta-highlight{
+    display:inline-block;margin-top:26px;padding:16px 26px;border-radius:18px;
+    background:rgba(198,242,78,.18);
+    border:1px solid rgba(198,242,78,.45);
+    font-weight:700;font-size:16.5px;color:#eaffb0;
+  }
+  .cta-actions{margin-top:36px;}
+  .cta-section .micro{color:rgba(255,255,255,.75);}
+
+  .faq-list{display:flex;flex-direction:column;gap:16px;margin-top:40px;}
+  .faq-item{
+    border-radius:20px;background:#fff;border:1px solid rgba(107,63,212,.1);
+    box-shadow:0 10px 26px rgba(74,31,168,.06);
+    overflow:hidden;
+    transition:box-shadow .3s ease;
+  }
+  .faq-item:hover{box-shadow:0 16px 36px rgba(74,31,168,.12);}
+  .faq-q{
+    width:100%;text-align:left;padding:22px 26px;font-weight:800;font-size:17px;
+    background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    color:var(--ink);font-family:inherit;
+  }
+  .faq-q .plus{
+    flex:0 0 30px;height:30px;border-radius:50%;
+    background:rgba(107,63,212,.1);display:grid;place-items:center;
+    font-size:20px;color:var(--violet-deep);transition:transform .3s ease, background .3s ease;
+  }
+  .faq-item.open .faq-q .plus{transform:rotate(45deg);background:var(--lime);}
+  .faq-a{
+    max-height:0;overflow:hidden;transition:max-height .45s ease, padding .3s ease;
+    padding:0 26px;color:var(--ink-soft);font-size:15.5px;
+  }
+  .faq-item.open .faq-a{max-height:240px;padding:0 26px 24px;}
+
+  .final{
+    text-align:center;padding:100px 0 60px;
+  }
+  .final h2{
+    font-size:clamp(28px,3.6vw,46px);font-weight:900;letter-spacing:-.7px;
+    max-width:820px;margin:0 auto;
+  }
+  .final .accent{
+    background: linear-gradient(120deg, var(--violet), var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .final .btn-wrap{margin-top:38px;display:flex;flex-direction:column;align-items:center;}
+
+  footer{
+    border-top:1px solid rgba(107,63,212,.1);
+    padding:30px 0;text-align:center;font-size:13.5px;color:var(--ink-soft);
+  }
+
+  /* ---------- АДАПТИВ ---------- */
+  @media(max-width:960px){
+    .hero-grid,.solution{grid-template-columns:1fr;}
+    .hero-art{height:420px;order:-1;} /* Уменьшаем высоту баннера на планшетах */
+    .cards-3{grid-template-columns:1fr;}
+    .trust-grid{grid-template-columns:1fr 1fr;}
+    .nav a.nav-link{display:none;}
+  }
+  @media(max-width:640px){
+    section{padding:56px 0;}
+    .hero{padding:60px 0 40px;}
+    .hero-art{height:340px;} /* Уменьшаем высоту баннера на телефонах */
+    .btn{padding:18px 30px;font-size:16px;width:100%;}
+    .trust-grid{grid-template-columns:1fr;}
+    .cta-section{padding:46px 26px;}
+    .glass-card{padding:26px;}
+    th,td{padding:12px 12px;font-size:14px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{transition:none;opacity:1;transform:none;}
+    .hero-img{transform: none !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<header>
+  <div class="container nav">
+    <div class="logo"><span class="logo-dot"></span>СЕМЬ ОЗЁР · МОНСТРЫ</div>
+    <nav>
+      <a class="nav-link" href="#pain">Знакомо?</a>
+      <a class="nav-link" href="#schedule">Расписание</a>
+      <a class="nav-link" href="#master">Мастер-классы</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+      <button class="btn" onclick="openForm()">Хочу к монстрам</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <h1>7 дней без <span class="accent">«Мам, мне скучно»</span>.<br>Новогодняя монстр-программа в «Семи Озёрах»</h1>
+      <p class="sub">Загородный комплекс в 85 км от Петербурга. Ребёнок проходит ежедневные миссии и охотится на монстров — вы отдыхаете в коттедже, у камина или на прогулке. Каждый день — новая история, каждый вечер — семейное мероприятие.</p>
+      <div class="hero-actions">
+        <button class="btn" onclick="openForm()">Хочу к монстрам</button>
+        <p class="micro">Нажимая, вы соглашаетесь на обработку данных. Мы позвоним, чтобы уточнить возраст детей и зарезервировать место на программе. Это ни к чему не обязывает, но монстры уже ждут.</p>
+      </div>
+    </div>
+
+    <!-- ВСТАВЛЕННЫЙ БАННЕР -->
+    <div class="hero-art reveal delay-2">
+      <img src="banner.jpg" alt="Новогодние каникулы в Семи Озёрах: монстры играют в аэрохоккей" class="hero-img" id="heroImg">
+    </div>
+  </div>
+</section>
+
+<section id="pain">
+  <div class="container">
+    <div class="glass-card pain-card reveal">
+      <div class="quote">«Хочется, чтобы ребёнок приехал с горящими глазами, а не с “ну было норм”»</div>
+      <p>Обычные ёлки и стандартные лагеря приелись. Ребёнку 7 лет — он уже не верит в Деда Мороза, но очень хочет верить в чудо. Нужна история, в которую он включится по-настоящему, а не просто постоит у ёлки с хороводом.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container solution">
+    <div class="reveal">
+      <h2>Сюжет, а не просто «мероприятия»</h2>
+      <p>Вся неделя — одна большая история про монстров. Каждый день дети получают «миссию»: найти, подружиться, обезвредить — безопасно и смешно. В конце дня — артефакт или значок, который копится к финальному посвящению. Это не «посмотрели шоу и разошлись», а вовлечение, которое держит внимание ребёнка все 7 дней.</p>
+      <div class="badge-row">
+        <span class="badge">Ежедневные миссии</span>
+        <span class="badge">Артефакты и значки</span>
+        <span class="badge">Финальное посвящение</span>
+        <span class="badge">Безопасно и смешно</span>
+      </div>
+    </div>
+    <div class="glass-card reveal delay-2">
+      <h2 style="font-size:22px;">Как выглядит день</h2>
+      <p style="margin-bottom:18px;">Утро — детям, день — вам, вечер — снова вместе. У ребёнка драйв, у вас — законные часы тишины.</p>
+      <p style="font-weight:700;color:var(--violet-deep);">Квест → обед → мастер-класс или свободное время → семейное мероприятие → костёр</p>
+    </div>
+  </div>
+</section>
+
+<section id="schedule">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">День 3. «Монстр под кроватью»</h2>
+      <p class="section-lead">Пример расписания одного дня — чтобы вы понимали ритм каникул.</p>
+    </div>
+    <div class="schedule-wrap reveal delay-1" style="margin-top:36px;">
+      <table>
+        <thead>
+          <tr><th>Время</th><th>Что происходит</th><th>Для кого</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>09:00–10:00</td><td>Завтрак в ресторане</td><td>Вся семья</td></tr>
+          <tr><td>10:00–12:30</td><td>Квест «Найди монстра в лесу» с аниматорами</td><td>Дети</td></tr>
+          <tr><td>12:30–13:30</td><td>Обед</td><td>Вся семья</td></tr>
+          <tr><td>13:30–15:30</td><td><strong>Мастер-класс «Создай маску монстра»</strong> (платно, 800 ₽)</td><td>Дети (по желанию)</td></tr>
+          <tr><td>13:30–15:30</td><td>Свободное время: спа, баня, прогулка, камин</td><td>Родители</td></tr>
+          <tr><td>15:30–16:30</td><td>«Тихий час» / детский клуб / настольные игры</td><td>Дети</td></tr>
+          <tr><td>17:00–18:00</td><td>Ужин</td><td>Вся семья</td></tr>
+          <tr><td>18:30–20:00</td><td>Семейное мероприятие: театр теней «Монстр-истории»</td><td>Вся семья</td></tr>
+          <tr><td>20:00–22:00</td><td>Костёр, глинтвейн, маршмеллоу</td><td>Вся семья</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sched-note reveal">*Расписание может меняться в зависимости от погоды и настроения монстров.</p>
+  </div>
+</section>
+
+<section id="master">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Платные мастер-классы — маленькие группы, большие впечатления</h2>
+      <p class="section-lead">Группы по 8–10 человек. Запись заранее — на ресепшене или при бронировании.</p>
+    </div>
+    <div class="cards-3">
+      <div class="glass-card mc-card reveal">
+        <span class="price">800 ₽</span>
+        <h3>«Создай маску монстра»</h3>
+        <p>Ребёнок уходит с готовой маской и чувством, что он сам сотворил чудовище. Материалы включены.</p>
+        <div class="age">6+</div>
+      </div>
+      <div class="glass-card mc-card reveal delay-1">
+        <span class="price">800 ₽</span>
+        <h3>«Съедобный монстр»</h3>
+        <p>Кулинарный мастер-класс: лепим монстров из мастики, а потом их едим. Самый популярный у детей.</p>
+        <div class="age">5+</div>
+      </div>
+      <div class="glass-card mc-card reveal delay-2">
+        <span class="price">800 ₽</span>
+        <h3>«Монстр-театр теней»</h3>
+        <p>Делаем персонажей, репетируем и показываем мини-спектакль родителям вечером.</p>
+        <div class="age">7+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Почему родители выбирают «Семь Озёр»</h2>
+      <p class="section-lead">Всё, что нужно для спокойных каникул — уже на территории.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item reveal"><div class="trust-ico">32</div><span>га закрытой территории: лес, озёра, эко-тропы</span></div>
+      <div class="trust-item reveal delay-1"><div class="trust-ico">🏠</div><span>Отапливаемые бревенчатые коттеджи — тепло даже в январе</span></div>
+      <div class="trust-item reveal delay-2"><div class="trust-ico">🍽</div><span>Ресторан с детским меню, без «накормим чем-нибудь»</span></div>
+      <div class="trust-item reveal"><div class="trust-ico">🎠</div><span>Детский клуб и зоопарк на территории</span></div>
+      <div class="trust-item reveal delay-1"><div class="trust-ico">🎭</div><span>Аниматоры с опытом работы с детьми 4–12 лет</span></div>
+      <div class="trust-item reveal delay-2"><div class="trust-ico">🚗</div><span>85 км от Петербурга — можно доехать на машине за 1,5 часа</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="container">
+    <div class="cta-section reveal">
+      <h2>Январь придёт быстро. Монстры — ещё быстрее.</h2>
+      <p>Мы формируем группы под программу и закупаем материалы под количество детей. Чем раньше вы бронируете — тем гарантированнее место на мастер-классах (они правда маленькие, по 8–10 человек) и тем спокойнее вы встречаете Новый год, зная, что каникулы уже распланированы.</p>
+      <div class="cta-highlight">До 15 декабря мастер-класс «Создай своего монстра» (обычно 800 ₽/ребёнок) — бесплатно для всех детей из забронированных коттеджей.</div>
+      <div class="cta-actions">
+        <button class="btn" onclick="openForm()">Хочу к монстрам</button>
+        <p class="micro">Нажимая, вы соглашаетесь на обработку данных. Мы позвоним, чтобы уточнить возраст детей и зарезервировать место на программе. Это ни к чему не обязывает, но монстры уже ждут.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Частые вопросы</h2>
+      <p class="section-lead">Если что-то осталось непонятным — просто спросите при звонке.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q">Можно ли с животными?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Да, по предварительному согласованию. Уточните при бронировании.</p></div>
+      </div>
+      <div class="faq-item reveal delay-1">
+        <button class="faq-q">Что если ребёнок стесняется и не хочет идти к аниматорам?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Ничего страшного. Программа построена так, что можно включиться в любой момент. Аниматоры не тащат в круг силой — сначала знакомятся, потом вовлекают. Многие «стесняшки» к третьему дню становятся главными активистами.</p></div>
+      </div>
+      <div class="faq-item reveal delay-2">
+        <button class="faq-q">Можно ли приехать без проживания, только на программу?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Да, есть вариант «дневного посещения» для тех, кто живёт рядом. Уточните условия при звонке.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Что входит в стоимость проживания?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Коттедж, завтраки, участие в ежедневной программе, доступ к детскому клубу и территории. Обеды и ужины — по меню ресторана. Мастер-классы — отдельно (кроме акционного).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="container">
+    <h2 class="reveal">Пока вы читаете это, <span class="accent">монстры уже прячутся в лесу.</span></h2>
+    <p class="section-lead reveal delay-1" style="margin:22px auto 0;text-align:center;">Забронируйте каникулы, которые ребёнок будет вспоминать весь год. А вы — отдыхать.</p>
+    <div class="btn-wrap reveal delay-2">
+      <button class="btn" onclick="openForm()">Хочу к монстрам</button>
+      <p class="micro" style="text-align:center;">Нажимая, вы соглашаетесь на обработку данных. Мы позвоним, чтобы уточнить возраст детей и зарезервировать место на программе. Это ни к чему не обязывает, но монстры уже ждут.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© «Семь Озёр» · Новогодние каникулы в стиле «Монстры» · 85 км от Санкт-Петербурга</p>
+    <p style="margin-top:8px;opacity:.7;">Политика конфиденциальности · Согласие на обработку данных · Контакты</p>
+  </div>
+</footer>
+
+<script>
+  /* ---------- ПЛАВНОЕ ПОЯВЛЕНИЕ БЛОКОВ ПРИ СКРОЛЛЕ ---------- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ---------- ПАРАЛЛАКС ДЛЯ КАРТИНКИ-БАННЕРА ---------- */
+  const heroImg = document.getElementById('heroImg');
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    // Двигаем картинку внутри рамки (у нее высота 120%, поэтому есть запас)
+    if (heroImg && y < 1000) {
+      heroImg.style.transform = `translateY(${y * 0.15}px)`;
+    }
+  }, { passive: true });
+
+  /* ---------- АККОРДЕОН FAQ ---------- */
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(openItem => {
+        if (openItem !== item) openItem.classList.remove('open');
+      });
+      item.classList.toggle('open', !isOpen);
+    });
+  });
+
+  /* ---------- ОТКРЫТИЕ ЯНДЕКС ФОРМЫ В НОВОЙ ВКЛАДКЕ ---------- */
+  function openForm(){
+    window.open('https://forms.yandex.ru/u/6b06c988aeb3529d1673b2d2', '_blank');
+  }
+</script>
+
+</body>
+</html>
