@@ -5,8 +5,7 @@
 ## 🔗 Демо
 
 Посмотреть сайт вживую можно здесь: 
-👉 **[https://AnastasiyaSHar
-.github.io/7lakes
+👉 **[https://AnastasiyaSHar.github.io/7lakes
 /](https://AnastasiyaSHar.github.io/7lakes
 /)**
 
